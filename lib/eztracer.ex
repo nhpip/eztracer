@@ -103,6 +103,8 @@ defmodule EZTracerInternal do
 
   defp get_remote_pids(node, processes) do
     String.replace(processes, [" ", "[", "]"], "")
+    |> String.replace("<", "\"<")
+    |> String.replace(">", ">\"")
     |> String.split(",")
     |> Enum.map(fn item -> make_possible_atom(item) <> "," end)
     |> Enum.into("")
@@ -190,8 +192,8 @@ defmodule EZTracerInternal do
     end
   end
 
-  defp eval_string(procsses) do
-    {evaled, _} = Code.eval_string("[" <> procsses <> "]")
+  defp eval_string(processes) do
+    {evaled, _} = IO.inspect Code.eval_string("["<> processes <> "]")
     evaled
   end
 
