@@ -161,7 +161,7 @@ defmodule EZTracerInternal do
     {:ok, {:ok, last_result}}
 
   def get_pg2_name_process_id(node, name, _last_result), do:
-    get_pg2_rpc(node, name)
+    get_pid_rpc(node, :pg2, :get_local_members, [name])
 
   defp get_pid_rpc(node, m, f, a) do
     case :rpc.call(node, m, f, a) do
@@ -177,21 +177,14 @@ defmodule EZTracerInternal do
       [result] when is_pid(result) ->
         {:ok, {:ok, result}}
 
+      result when is_list(result) ->
+        {:ok, {:ok, result}}
+
       _ ->
         {:ok, :exception}
     end
   end
-
-  defp get_pg2_rpc(node, term) do
-    case :rpc.call(node, :pg2, :get_local_members, [term]) do
-      res when is_list(res) ->
-        {:ok, {:ok, res}}
-
-      _ ->
-        {:ok, {:error,term}}
-    end
-  end
-
+  
   defp eval_string(processes) do
     {evaled, _} = Code.eval_string("["<> processes <> "]")
     evaled
