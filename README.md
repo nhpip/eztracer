@@ -1,4 +1,4 @@
-# cstracer
+# eztracer
 
 Provides a tracing tool for monitoring function calls and process to process messages to or from one or many processes.
 
@@ -8,13 +8,13 @@ Provides a tracing tool for monitoring function calls and process to process mes
 The argument `--processes` is a list of processes, or a single process, that should be monitored. A process can be a pid in the form <x.y.z> or a name. If it's a name it will assume it's an atom (no neeed for the leading :), it will also accept a tuple containing atoms. It will first find any registered processes of that name, and if that fails a pg2 group. You can use "ranch" and it will get the pid of the ranch `:conn_sup` supervisor. This is the entry point of all API calls and will spawn a process to handle that request (you should also specify the arguments `--sol` and `--sos` in this case).
 
 **Example:**
-`--processes "ranch,<0.1137.0>,CollectionServer.PubSub,{phx,CollectionServer.PubSub}"`
+`--processes "ranch,<0.1137.0>,AwesomeApp.Emailer,:erl_epmd,{phx,AwsomeApp.PubSub}"`
 
 #### Module/Function
-The argument `--mf` specifies a list of modules and functions you wish to monitor. It takes the format `"M:F"`, and underscore is a wildcard so `"_:_"` will cause the processes been monitored to trace calls to/from every module and function that is loaded in the runtime (so should be avoided). You can simply specify `cs` to monitor all calls to/from modules/functions in CollectionServer.
+The argument `--mf` specifies a list of modules and functions you wish to monitor. It takes the format `"M:F"`, and underscore is a wildcard so `"_:_"` will cause the processes been monitored to trace calls to/from every module and function that is loaded in the runtime (so should be avoided). 
 
 **Example:**
-`--mf "ets:_,CollectionServer.Users.PVAdmin:send_mail,Enum:_` will indicate calls to the `ets` module to the module:function `CollectionServer.Users.PVAdmin:send_mail` and all calls to the `Enum` module.
+`--mf "ets:_,AwesomeApp.Emailer:send_mail,Enum:_` will indicate calls to the `ets` module to the module:function `AwesomeApp.Emailer:send_mail` and all calls to the `Enum` module.
 
 #### Timestamp
 The argument `--timestamp` will add the current date/time to every event, it uses Erlang's `:os.timestamp()`, so if you can match a function `:call` with the `:return_from` you can calculate the time spent with `:timer.now_diff/2`.
@@ -26,19 +26,17 @@ The argument `--timestamp` will add the current date/time to every event, it use
 `--type` what to monitor, `messages` will monitor messages only, `code` will monitor function calls only or `both` will do both code and messages
 `--msgs` how many events to trace before terminating. The default is 100 the word `infinity` will never stop
 
-Finally, doing `--processes ranch --mf "_:_"` will likely swamp you with output.
-
 ## Compiling
 
 Execute `mix escript.build`
 
 ## Usage
 ```
-cstracer --help
+eztracer --help
 
-cstracer:
+eztracer:
 
- --node [node]: the Erlang VM you want tracing on (e.g. cs@localhost)
+ --node [node]: the Erlang VM you want tracing on
 
  --cookie [cookie]: the VM cookie (optional)
 
