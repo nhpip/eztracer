@@ -63,7 +63,7 @@ eztracer:
 
 ## Example Output 
 ```
-$ ./eztracer --node cs@localhost --processes "<0.12311.0>" --msgs infinity --type code --mf "Enum:_"
+$ ./eztracer --node awesomeapp@localhost --processes "<0.12311.0>" --msgs infinity --type code --mf "Enum:_"
 {:trace, #PID<9241.12311.0>, :call,
  {Enum, :map, [[1, 2, 3], #Function<7.126501267/1 in :erl_eval.expr/5>]}}
 
