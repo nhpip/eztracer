@@ -63,45 +63,38 @@ eztracer:
 
 ## Example Output 
 ```
+$ ./eztracer --node awesomeapp@localhost --processes "<0.12311.0>" --msgs infinity --type code --mf "Enum:_"
+{:trace, #PID<9241.12311.0>, :call,
+ {Enum, :map, [[1, 2, 3], #Function<7.126501267/1 in :erl_eval.expr/5>]}}
 
-{:trace_ts, #PID<9239.3729.0>, :call,
- {CollectionServer.Types.Range, :cast,
-  [
-    {0, 0},
-    %{
-      parent: %{
-        __dirty__: false,
-        __struct__: CollectionServer.Types.UserInfo,
-        account_version: 0,
-        admin: false,
-        claimed: true,
-        collection_id: %{
-          __struct__: CollectionServer.Types.UUID,
-          value: <<249, 145, 98, 152, 253, 154, 74, 99, 171, 235, 144, 133, 201,
-            155, 18, 120>>
-        },
-        default_collection_id: nil,
-        deleted: false,
-        devices: nil,
-        display_name: "bob smith",
-        entity_id: nil,
-        entity_metadata: nil,
-        key_range: nil,
-        public_key: nil,
-        storage_backend: nil,
-        user_id: nil
-      }
-    }
-  ]}, {1621, 20060, 336917}}
+{:trace, #PID<9241.12311.0>, :call,
+ {Enum, :"-map/2-lists^map/1-0-",
+  [[1, 2, 3], #Function<7.126501267/1 in :erl_eval.expr/5>]}}
 
-{:trace_ts, #PID<9239.3729.0>, :return_from,
- {CollectionServer.Types.Range, :cast, 2},
- {:ok, %{__struct__: CollectionServer.Types.Range, lower: 0, upper: 0}},
- {1621, 20060, 336919}}
+{:trace, #PID<9241.12311.0>, :call,
+ {Enum, :"-map/2-lists^map/1-0-",
+  [[2, 3], #Function<7.126501267/1 in :erl_eval.expr/5>]}}
+
+{:trace, #PID<9241.12311.0>, :call,
+ {Enum, :"-map/2-lists^map/1-0-",
+  [[3], #Function<7.126501267/1 in :erl_eval.expr/5>]}}
+
+{:trace, #PID<9241.12311.0>, :call,
+ {Enum, :"-map/2-lists^map/1-0-",
+  [[], #Function<7.126501267/1 in :erl_eval.expr/5>]}}
+
+{:trace, #PID<9241.12311.0>, :return_from, {Enum, :"-map/2-lists^map/1-0-", 2},
+ []}
+
+{:trace, #PID<9241.12311.0>, :return_from, {Enum, :"-map/2-lists^map/1-0-", 2},
+ '\b'}
+
+{:trace, #PID<9241.12311.0>, :return_from, {Enum, :"-map/2-lists^map/1-0-", 2},
+ '\a\b'}
+
+{:trace, #PID<9241.12311.0>, :return_from, {Enum, :"-map/2-lists^map/1-0-", 2},
+ [6, 7, 8]}
+
+{:trace, #PID<9241.12311.0>, :return_from, {Enum, :map, 2}, [6, 7, 8]}
 
 ```
-```
-iex(1)> :timer.now_diff({1621, 20060, 336919}, {1621, 20060, 336917}) 
-2
-```
-So this function call took `2` microseconds. Dependng on how `--mf` is specified there can be a lot of nesting of function calls.
