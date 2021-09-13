@@ -193,7 +193,7 @@ defmodule EZTracerInternal do
   end
 
   defp eval_string(processes) do
-    {evaled, _} = IO.inspect Code.eval_string("["<> processes <> "]")
+    {evaled, _} = Code.eval_string("["<> processes <> "]")
     evaled
   end
 
