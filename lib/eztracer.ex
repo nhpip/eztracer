@@ -49,21 +49,7 @@ defmodule EZTracerInternal do
       help()
     end
 
-    node = args[:node]
-    target_node = String.to_atom(node)
-    [_,address] = String.split(node, "@")
-    my_node = String.to_atom("tracer@"<>address)
-    dist_type = if String.contains?(address, ".") do :longnames else :shortnames end
-
-    Application.start(:inets)
-    :net_kernel.start([my_node, dist_type])
-
-    processes = args[:processes]
-
-    case Keyword.get(args, :cookie) do
-      nil -> :ok
-      cookie -> :erlang.set_cookie(node(), String.to_atom(cookie))
-    end
+    target_node = EZTracerConnect.connect(args)
 
     remote_module_load(target_node)
 
@@ -72,6 +58,8 @@ defmodule EZTracerInternal do
       {:erl_signal_handler, []},
       {SignalHandler, [self()]}
     )
+
+    processes = args[:processes]
 
     get_remote_pids(target_node, processes) |> do_start_tracing(target_node, args) |> cleanup(target_node)
   end
@@ -184,7 +172,7 @@ defmodule EZTracerInternal do
         {:ok, :exception}
     end
   end
-  
+
   defp eval_string(processes) do
     {evaled, _} = Code.eval_string("["<> processes <> "]")
     evaled
@@ -403,7 +391,7 @@ defmodule EZTracerInternal do
     first = String.at(module, 0)
     String.upcase(first) == first
   end
-
+  
   defp help() do
     IO.puts("eztracer:\n")
     IO.puts(" --node [node]: the Erlang VM you want tracing on\n")
@@ -446,6 +434,51 @@ defmodule EZTracerInternal do
 
     System.halt()
   end
+end
+
+defmodule EZTracerConnect do
+
+  def connect(args) do
+
+    my_name = "eztracer"
+
+    node = if args[:node], do: format_node(args[:node]), else: raise("error connecting")
+
+    Application.start(:inets)
+
+    my_name = if args[:myname], do: args[:myname], else: my_name <> "@localhost"
+    :net_kernel.start([String.to_atom(my_name), find_dist_type(node)])
+
+    case args[:cookie] do
+      nil -> :ok
+      cookie -> :erlang.set_cookie(node(), String.to_atom(cookie))
+    end
+
+    if :net_adm.ping(node) == :pang, do: raise("not connected"), else: node
+  end
+
+  defp format_node(node) do
+   [name, address] = String.split(node, "@")
+    case :inet.parse_address(to_charlist(address)) do
+      {:ok, _} -> String.to_atom(node)
+      _ -> get_address(name, address, node)
+    end
+  end
+
+  defp get_address(name, address, node) do
+    case :inet_res.gethostbyname(String.to_atom(address)) do
+      {:ok, {:hostent, _, [], :inet, _, addresses}} ->
+        parsed = :inet.ntoa(hd(addresses)) |> to_string()
+        String.to_atom("#{name}@#{parsed}")
+      _ ->
+        String.to_atom(node)
+    end
+  end
+
+  defp find_dist_type(node) do
+    if String.contains?(Atom.to_string(node), ".") do :longnames else :shortnames end
+  end
+
 end
 
 defmodule SignalHandler do
