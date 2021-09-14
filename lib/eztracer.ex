@@ -1,3 +1,27 @@
+#
+# MIT License
+#
+# Copyright (c) 2021 Matthew Evans
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+
 defmodule EZTracer do
 
   def main(args \\ []) do
@@ -391,46 +415,24 @@ defmodule EZTracerInternal do
     first = String.at(module, 0)
     String.upcase(first) == first
   end
-  
+
   defp help() do
-    IO.puts("eztracer:\n")
-    IO.puts(" --node [node]: the Erlang VM you want tracing on\n")
-    IO.puts(" --cookie [cookie]: the VM cookie (optional)\n")
 
-    IO.puts(
-      " --processes [pid, reg_name or gp2 group]: the remote process pid (e.g. \"<0.249.0>\") or registered name you want to trace (other options ranch or pg2 group)\n"
-    )
-
-    IO.puts(
-      " --msgs [integer]: how many trace events it will receive before terminating (default 100 or the word infinity)\n"
-    )
-
-    IO.puts(
-      " --type [type]: one of \"messages\", \"code\" or \"both\" to trace process messages, code executed or both (default messages)\n"
-    )
-
-    IO.puts(
-      " --sos: if present will apply tracing to any process spawned by those defined in --processes\n"
-    )
-
-    IO.puts(
-      " --sol: if present will apply tracing to any process linked to by those defined in --processes\n"
-    )
-
-    IO.puts(
-      " --timestamp: if present applies a timestamp to the end of each event\n"
-    )
-
-    IO.puts(
-      " --noargs: if present will attempt to suppress the display of any arguments\n"
-    )
-
-    IO.puts(
-      " --mf [string]: a comma separated list of module:fun of which modules and functions to trace, with underscore _ as a wildcard.
-              Example \"Foo:bar,MyApp:_\" will trace calls to Foo:bar and all calls to MyApp (default is \"_:_\")\n"
-    )
-
-    IO.puts(" --help: this page\n")
+    IO.puts("
+    \neztracer:
+    \n --node [node]: the Erlang VM you want tracing on
+    \n --cookie [cookie]: the VM cookie (optional)
+    \n --processes [pid, reg_name or gp2 group]: the remote process pid (e.g. \"<0.249.0>\") or registered name you want to trace (other options ranch or pg2 group)
+    \n --msgs [integer]: how many trace events it will receive before terminating (default 100 or the word infinity)
+    \n --type [type]: one of \"messages\", \"code\" or \"both\" to trace process messages, code executed or both (default messages)
+    \n --sos: if present will apply tracing to any process spawned by those defined in --processes
+    \n --sol: if present will apply tracing to any process linked to by those defined in --processes
+    \n --timestamp: if present applies a timestamp to the end of each event
+    \n --noargs: if present will attempt to suppress the display of any arguments
+    \n --mf [string]: a comma separated list of module:fun of which modules and functions to trace, with underscore _ as a wildcard.
+              Example \"Foo:bar,MyApp:_\" will trace calls to Foo:bar and all calls to MyApp (default is \"_:_\")
+    \n --help: this page\n
+  ")
 
     System.halt()
   end
