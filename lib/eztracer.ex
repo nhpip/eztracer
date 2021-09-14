@@ -436,12 +436,12 @@ defmodule EZTracerInternal do
 
     System.halt()
   end
+
 end
 
 defmodule EZTracerConnect do
 
   def connect(args) do
-
     my_name = "eztracer"
 
     node = if args[:node], do: format_node(args[:node]), else: raise("error connecting")
