@@ -5,7 +5,7 @@ Provides a tracing tool for monitoring function calls and process to process mes
 ### Options
 
 #### Processes
-The argument `--processes` is a list of processes, or a single process, that should be monitored. A process can be a pid in the form <x.y.z> or a registered process name. If it's a name it will assume it's an atom, it will also accept a tuples in case of PG2 group searches. It will first find any registered processes of that name, and if that fails a PG2 group. Originally I designed it to work with the `ranch` socket acceptor (https://github.com/ninenines/ranch). With that in mind your can specify the word `ranch' and it will attempt to trace calls to that application. You should also specify the arguments `--sol` and `--sos` in this case. NOTE: The`ranch` option has not been tested on all versions.
+The argument `--processes` is a list of processes, or a single process, that should be monitored. A process can be a pid in the form <x.y.z> or a registered process name. If it's a name it will assume it's an atom, it will also accept a tuples in case of PG2 group searches. It will first find any registered processes of that name, and if that fails a PG2 group. Originally I designed it to work with the `ranch` socket acceptor (https://github.com/ninenines/ranch). With that in mind your can specify the word *ranch* and it will attempt to trace calls to that application. You should also specify the arguments `--sol` and `--sos` in this case. NOTE: The`ranch` option has not been tested on all versions.
 
 **Example:**
 `--processes "ranch,<0.1137.0>,AwesomeApp.Emailer,:erl_epmd,{phx,AwsomeApp.PubSub}"`
