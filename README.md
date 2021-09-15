@@ -11,7 +11,7 @@ The argument `--processes` is a list of processes, or a single process, that sho
 `--processes "ranch,<0.1137.0>,AwesomeApp.Emailer,:erl_epmd,{phx,AwsomeApp.PubSub}"`
 
 #### Module/Function
-The argument `--mf` specifies a list of modules and functions you wish to monitor. It takes the format `"M:F"`, and underscore is a wildcard so `"_:_"` will cause the processes been monitored to trace calls to/from every module and function that is loaded in the runtime (so should be avoided). 
+The argument `--mf` specifies a list of modules and functions you wish to monitor. It takes the format `"M:F"`, and underscore is a wildcard so `"_:_"` will cause the processes been monitored to trace calls to/from every module and function that is loaded in the runtime (so should be avoided). That said, depending on your application, it is highly recommended to apply some kind of filter.
 
 **Example:**
 `--mf "ets:_,AwesomeApp.Emailer:send_mail,Enum:_` will indicate calls to the `ets` module to the module:function `AwesomeApp.Emailer:send_mail` and all calls to the `Enum` module.
