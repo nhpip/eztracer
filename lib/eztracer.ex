@@ -371,7 +371,7 @@ defmodule EZTracerInternal do
 
   defp get_trace_opts(node, opts) do
     trace_type = Keyword.get(opts, :type, "messages")
-    mod_fun = Keyword.get(opts, :mf, "_:_")
+    mod_fun = Keyword.get(opts, :mf, "_:_") |> String.replace(" ", "")
 
     p_opts =
       Enum.reduce(@pops, [], fn {k, _} = _d, acc ->
